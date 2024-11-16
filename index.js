@@ -1,9 +1,14 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+
 const app = express();
 const PORT = 3000;
 
 // import the config files
 import './config/mongodb.js';
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // importing the routes
 import { router } from './routes/index.js';
