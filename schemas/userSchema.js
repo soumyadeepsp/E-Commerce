@@ -6,11 +6,13 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
     firstname: {type: String, required: true}, 
     lastname: {type: String, required: true},
-    email: {type: String, required: true},
+    email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     mobile: {type: Number, required: true},
     address: {type: String, required: true}, 
     pin: {type: Number, required: true}, 
+    sessionToken: {type: String},
+    lastLogInTime: {type: Date}
 });
 
 userSchema.pre('save', async function(next) {
