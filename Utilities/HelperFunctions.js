@@ -25,7 +25,7 @@ export const generateRandomOtp = () => {
 export const sendSms = async (mobiles, otp) => {
     try {
         // https://www.fast2sms.com/dev/bulkV2?authorization=YOUR_API_KEY&variables_values=5599&route=otp&numbers=9999999999,8888888888,7777777777
-        const API_KEY = "TbQDydw9pFqAl42YNrKX5v78nkBgPiEHo1cexMtWGVCjUZusL09YwKrT32hjSkzPZO5NBApRV8suMLqG";
+        const API_KEY = "";
         const response = await fetch(`https://www.fast2sms.com/dev/bulkV2?authorization=${API_KEY}&variables_values=${otp}&route=otp&numbers=${mobiles.join(',')}`, {
             method: 'GET',
         });
