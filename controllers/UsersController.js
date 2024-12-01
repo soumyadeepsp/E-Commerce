@@ -42,5 +42,14 @@ export const signin = async (req, res) => {
     }
 }
 
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzM4NmU2ZTZjM2I2YTVmNmRiZDY4NzAiLCJpYXQiOjE3MzE4MzU5ODcsImV4cCI6MTczMTkyMjM4N30.yB3RVDgKQtjDkI4XcgPVRC_yDu459QIvUBTBRBrkIG4
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzM4NmU2ZTZjM2I2YTVmNmRiZDY4NzAiLCJpYXQiOjE3MzE4MzU4NTMsImV4cCI6MTczMTkyMjI1M30.VAjqh-dxrsDg3dkoadxJepKTEvpNLRiw2p4rp1WAuEE
+export const signout = async (req, res) => {
+    try {
+        const jwt = req.cookies.auth_token;
+        res.clearCookie('auth_token');
+        await User.findOneAndUpdate({sessionToken: jwt}, {sessionToken: ''});
+        return res.status(200).send('User logged out successfully');
+    } catch(err) {
+        console.log(err);
+        return res.status(500).send('There is some server error, please try in some other time');
+    }
+}

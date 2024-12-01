@@ -12,7 +12,9 @@ const userSchema = new Schema({
     address: {type: String, required: true}, 
     pin: {type: Number, required: true}, 
     sessionToken: {type: String},
-    lastLogInTime: {type: Date}
+    lastLogInTime: {type: Date},
+    verifiedEmail: {type: Boolean, required: true, default: false},
+    verifiedMobile: {type: Boolean, required: true, default: false}
 });
 
 userSchema.pre('save', async function(next) {

@@ -6,11 +6,11 @@ export const router = express.Router();
 
 // importing the controllers
 import { homeController } from '../controllers/HomeController.js';
-import { sendEmailController } from '../controllers/EmailController.js';
-import { sendSmsController } from '../controllers/SMSController.js';
+import { sendSmsController, sendEmailController, verifyOtpController } from '../controllers/OtpController.js';
 
 router.get('/', isUserSignedin, homeController);
 router.post('/send-email', isUserSignedin, sendEmailController);
 router.post('/send-otp', isUserSignedin, sendSmsController);
+router.get('/verify-otp/:otp', isUserSignedin, verifyOtpController);
 
 router.use('/users', userRouter);

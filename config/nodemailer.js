@@ -24,4 +24,3 @@ transporter.verify((error, success) => {
         console.log('Transporter configured successfully');
     }
 });
-
