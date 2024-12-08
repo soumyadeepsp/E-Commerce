@@ -1,4 +1,5 @@
 import { transporter } from '../config/nodemailer.js';
+import bcrypt from 'bcrypt';
 
 export const sendEmail = async (emails, subject, message) => {
     // Define email options
@@ -36,4 +37,14 @@ export const sendSms = async (mobiles, otp) => {
         console.log(err);
         return { success: false, message: 'There is some server error, please try in some other time' };
     }
+}
+
+export const hashPassword = async (password) => {
+    const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, salt);
+}
+
+export function removeSpecialCharacters(str) {
+    // Regular expression to match all non-alphanumeric characters except spaces
+    return str.replace(/[^a-zA-Z0-9 ]/g, '');
 }

@@ -10,7 +10,7 @@ export const transporter = nodemailer.createTransport({
     secure: false, // true for 465, false for other ports
     auth: { // sender email id credentials
         user: 'cncoding5@gmail.com', // Replace with your email
-        pass: '' // Replace with your email password
+        pass: 'qfvcfgxqwaxflkje' // Replace with your email password
     }
 });
 
@@ -24,3 +24,9 @@ transporter.verify((error, success) => {
         console.log('Transporter configured successfully');
     }
 });
+
+// clientid = 184798135325-2sg6bq34800oh2k8fok8erkj87hqvph2.apps.googleusercontent.com
+// app password = qfvcfgxqwaxflkje
+// client secret = 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
+// redirect uri = http://localhost:3000/callback
+// redirect uri 2 = https://developers.google.com/oauthplayground

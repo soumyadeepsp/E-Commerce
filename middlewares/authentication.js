@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 export const isUserSignedin = async (req, res, next) => {
     try {
+        console.log("hello world");
         const token = req.cookies.auth_token;
         const decoded = jwt.verify(token, 'MY-E-COMMERCE-TOKEN-SECRET');
         console.log(decoded);
@@ -13,6 +14,11 @@ export const isUserSignedin = async (req, res, next) => {
         }
         console.log(user);
         if (user.sessionToken==token) {
+            req.customData = {
+                userId: user._id,
+                email: user.email
+            };
+            console.log(user._id);
             next();
         } else {
             return res.status(400).send('Please sign in');

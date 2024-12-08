@@ -1,5 +1,6 @@
 import { mongoose } from 'mongoose';
 import bcrypt from 'bcrypt';
+import { hashPassword } from '../Utilities/HelperFunctions.js';
 
 const { Schema } = mongoose;
 
@@ -20,11 +21,7 @@ const userSchema = new Schema({
 userSchema.pre('save', async function(next) {
     if (this.isModified('password') || this.isNew) {
         try {
-            const salt = await bcrypt.genSalt(10);
-            console.log(this.password);
-            console.log(salt);
-            this.password = await bcrypt.hash(this.password, salt);
-            console.log(this.password);
+            this.password = await hashPassword(this.password);
             next();
         } catch (error) {
             next(error);
