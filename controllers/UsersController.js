@@ -2,9 +2,11 @@ import { User } from '../schemas/userSchema.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { PasswordResetUrl } from '../schemas/passwordResetUrlSchema.js';
-import { sendEmail, hashPassword } from '../Utilities/HelperFunctions.js';
+import { sendEmail, findMatchingProducts } from '../Utilities/HelperFunctions.js';
 import { Cart } from '../schemas/cartSchema.js';
 import { Product } from '../schemas/productSchema.js';
+import { Order } from '../schemas/orderSchema.js';
+import { ProductTokens } from '../schemas/productTokens.js';
 
 export const signup = async (req, res) => {
     try {
@@ -136,6 +138,87 @@ export const addToCart = async (req, res) => {
             await cart.save();
         }
         return res.status(200).send('Product added to cart successfully');
+    } catch(err) {
+        console.log(err);
+        return res.status(500).send('There is some server error, please try in some other time');
+    }
+}
+
+export const getCart = async (req, res) => {
+    try {
+        const userId = req.customData.userId;
+        const cart = await Cart.findOne({userId});
+        if (!cart) {
+            return res.status(200).send([]);
+        }
+        return res.status(200).send(cart.products);
+    } catch(err) {
+        console.log(err);
+        return res.status(500).send('There is some server error, please try in some other time');
+    }
+}
+
+export const addOrder = async (req, res) => {
+    try {
+        const userId = req.customData.userId;
+        const {paymentMethod, products} = req.body;
+        const datetime = new Date();
+        const order = new Order({userId, datetime, paymentMethod, products});
+        await order.save();
+        return res.status(201).send('Order placed successfully');
+    } catch(err) {
+        console.log(err);
+        return res.status(500).send('There is some server error, please try in some other time');
+    }
+}
+
+export const getOrders = async (req, res) => {
+    try {
+        const userId = req.customData.userId;
+        const orders = await Order.find({userId});
+        return res.status(200).send(orders);
+    } catch(err) {
+        console.log(err);
+        return res.status(500).send('There is some server error, please try in some other time');
+    }
+}
+
+export const searchProductInOrders = async (req, res) => {
+    try {
+        const userId = req.customData.userId;
+        const searchQuery = req.params.keywords;
+        let orders = await Order.find({userId});
+        const productTokens = [];
+        const map = {};
+        // for (const order of orders) {
+        //     for (const product of order.products) {
+        //         console.log(product);
+        //         if (!map[product.productId]) {
+        //             const tokenData = await ProductTokens.findOne({ productId: product.productId });
+        //             console.log("tokenData = " + tokenData);
+        //             productTokens.push(tokenData);
+        //             console.log("productTokens = " + productTokens);
+        //             map[product.productId] = true;
+        //         }
+        //     }
+        // }
+        orders = Array.from(orders);
+        orders.map((order) => { 
+            let products = Array.from(order.products);
+            products.map(async (product) => { 
+                console.log(product); 
+                if (!map[product.productId]) { 
+                    const tokenData = await ProductTokens.findOne({productId: product.productId}); 
+                    console.log("tokenData = "+tokenData); 
+                    productTokens.push(tokenData); 
+                    console.log("productTokens = "+productTokens); 
+                    map[product.productId] = true; 
+                } 
+            }); 
+        });
+        console.log("productTokens = " +productTokens);
+        const selectedProducts = await findMatchingProducts(searchQuery, productTokens, 1);
+        return res.status(200).send(selectedProducts);
     } catch(err) {
         console.log(err);
         return res.status(500).send('There is some server error, please try in some other time');

@@ -25,6 +25,6 @@ export const isUserSignedin = async (req, res, next) => {
         }
     } catch(err) {
         console.log(err);
-        return res.status(500).send('There is some server error, please try in some other time');
+        return res.status(500).send('You are logged out, please signin again.');
     }
 }

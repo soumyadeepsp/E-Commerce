@@ -1,6 +1,6 @@
 import { mongoose } from 'mongoose';
 import { ProductTokens } from './productTokens.js';
-import { removeSpecialCharacters } from '../Utilities/HelperFunctions.js';
+import { getTokensOfAProduct } from '../Utilities/HelperFunctions.js';
 
 const { Schema } = mongoose;
 
@@ -20,10 +20,7 @@ const productSchema = new Schema({
 
 productSchema.post('insertMany', function(docs) {
     docs.map(async (doc) => {
-        let name = removeSpecialCharacters(doc.name).toLowerCase();
-        let brand = removeSpecialCharacters(doc.brand).toLowerCase();
-        let description = removeSpecialCharacters(doc.description).toLowerCase();
-        const tokenArray = name.split(" ").concat(brand.split(" "), description.split(" "));
+        const tokenArray = getTokensOfAProduct(doc);
         await ProductTokens.create({productId: doc._id, tokenArray});
     });
 });

@@ -1,5 +1,6 @@
 import { transporter } from '../config/nodemailer.js';
 import bcrypt from 'bcrypt';
+import { ProductTokens } from '../schemas/productTokens.js';
 
 export const sendEmail = async (emails, subject, message) => {
     // Define email options
@@ -47,4 +48,42 @@ export const hashPassword = async (password) => {
 export function removeSpecialCharacters(str) {
     // Regular expression to match all non-alphanumeric characters except spaces
     return str.replace(/[^a-zA-Z0-9 ]/g, '');
+}
+
+export const findMatchingProducts = async (searchQuery, productTokens=null, limit) => {
+    console.log(searchQuery);
+    console.log(productTokens);
+    searchQuery = searchQuery.replaceAll('+', ' ');
+    searchQuery = removeSpecialCharacters(searchQuery).toLowerCase();
+    const searchTokens = searchQuery.split(' ');
+    if (!productTokens) {
+        productTokens = await ProductTokens.find({});
+    }
+    const tokenMatchingScore = [];
+    productTokens.map((productToken) => {
+        let score = 0;
+        productToken.tokenArray.map((token) => {
+            if (searchTokens.includes(token)) {
+                score++;
+            }
+        });
+        tokenMatchingScore.push({productId: productToken.productId, score});
+    });
+    tokenMatchingScore.sort((a, b) => {
+        return b.score - a.score;
+    });
+    if (tokenMatchingScore[0]==0) {
+        // if the score of the first product is 0, then no product matched as all the products will have a score of 0
+        return [];
+    }
+    const selectedProducts = tokenMatchingScore.slice(0, limit);
+    return selectedProducts;
+}
+
+export const getTokensOfAProduct = (doc) => {
+    let name = removeSpecialCharacters(doc.name).toLowerCase();
+    let brand = removeSpecialCharacters(doc.brand).toLowerCase();
+    let description = removeSpecialCharacters(doc.description).toLowerCase();
+    const tokenArray = name.split(" ").concat(brand.split(" "), description.split(" "));
+    return tokenArray;
 }
