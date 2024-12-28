@@ -2,6 +2,7 @@ import express from 'express';
 import { userRouter } from './users.js';
 import { productRouter } from './products.js';
 import { isUserSignedin } from '../middlewares/authentication.js';
+import { authRouter } from './auth.js';
 
 export const router = express.Router();
 
@@ -16,3 +17,6 @@ router.get('/verify-otp/:otp', isUserSignedin, verifyOtpController);
 
 router.use('/users', userRouter);
 router.use('/products', productRouter);
+
+router.use('/login', authRouter);
+router.use('/oauth2', authRouter);

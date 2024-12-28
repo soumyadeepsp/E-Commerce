@@ -51,8 +51,6 @@ export function removeSpecialCharacters(str) {
 }
 
 export const findMatchingProducts = async (searchQuery, productTokens=null, limit) => {
-    console.log(searchQuery);
-    console.log(productTokens);
     searchQuery = searchQuery.replaceAll('+', ' ');
     searchQuery = removeSpecialCharacters(searchQuery).toLowerCase();
     const searchTokens = searchQuery.split(' ');

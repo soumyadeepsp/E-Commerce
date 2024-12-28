@@ -11,14 +11,19 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
+    "connect-mongo": "^5.1.0",
+    "connect-sqlite3": "^0.9.15",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.1",
+    "express-session": "^1.18.1",
     "googleapis": "^144.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.1",
     "nodemailer": "^6.9.16",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "passport": "^0.7.0",
+    "passport-google-oidc": "^0.1.0"
   },
   "type": "module"
 }

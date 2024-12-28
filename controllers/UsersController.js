@@ -225,5 +225,13 @@ export const searchProductInOrders = async (req, res) => {
     }
 }
 
+export const loginPage = (req, res) => {
+    return res.sendFile('login.html', { root: './views' });
+}
+
+export const profilePage = (req, res) => {
+    return res.sendFile('profile.html', { root: './views' });
+}
+
 // $2b$10$NC9B4d.0YLueMhUJ22gtzunlzU6DfY.nup47wP08WEo2k2uJESA86
 // $2b$10$dCPNnfU.HIcfudfhnHYkGeAVuVaeGblr9r75uErb4qaYxiUuQU1mm

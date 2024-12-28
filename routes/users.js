@@ -6,7 +6,7 @@ export const userRouter = express.Router();
 // importing the controllers
 import { signup, signin, signout, sendResetPasswordUrl, 
     updatePassword, addToCart, addOrder, getOrders, 
-    searchProductInOrders } from '../controllers/UsersController.js';
+    searchProductInOrders, loginPage, profilePage } from '../controllers/UsersController.js';
 
 userRouter.post('/signup', signup);
 userRouter.post('/signin', signin);
@@ -17,3 +17,5 @@ userRouter.post('/add-to-cart', isUserSignedin, addToCart);
 userRouter.post('/add-order', isUserSignedin, addOrder);
 userRouter.get('/get-orders', isUserSignedin, getOrders);
 userRouter.get('/search-orders/:keywords', isUserSignedin, searchProductInOrders);
+userRouter.get('/login', loginPage);
+userRouter.get('/profile', profilePage);
