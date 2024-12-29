@@ -1,17 +1,17 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import path from 'path';
 import session from 'express-session';
-import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
+import dotenv from 'dotenv';
 
 // import the config files
 import './config/mongodb.js';
 
+dotenv.config();
+
 const app = express();
-const PORT = 3000;
 
 // use the middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,6 +36,6 @@ app.use('/', router);
 // everything that starts with / means every possible API route
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server is running on http://localhost:${process.env.SERVER_PORT}`);
 });

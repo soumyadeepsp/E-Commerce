@@ -2,12 +2,14 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oidc';
 import { User } from '../schemas/userSchema.js';
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const authRouter = express.Router();
 
 passport.use(new GoogleStrategy({
-    clientID: '',
-    clientSecret: '',
+    clientID: process.env.GOOGLE_AUTH_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
     callbackURL: '/oauth2/redirect/google',
     scope: [ 'profile', 'email' ]
   }, function verify(issuer, profile, cb) {
@@ -32,5 +34,5 @@ authRouter.get('/federated/google', passport.authenticate('google'));
 
 authRouter.get('/redirect/google', passport.authenticate('google', {
     successRedirect: '/users/profile',
-    failureRedirect: '/login'
+    failureRedirect: '/users/login'
 }));

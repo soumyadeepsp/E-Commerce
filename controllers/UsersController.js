@@ -230,6 +230,7 @@ export const loginPage = (req, res) => {
 }
 
 export const profilePage = (req, res) => {
+    console.log(req.user);
     return res.sendFile('profile.html', { root: './views' });
 }
 
